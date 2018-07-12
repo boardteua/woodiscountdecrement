@@ -109,11 +109,11 @@ class Woo_Counter_Discount_Admin {
         $html .= '</p>';
 
         $html .= '<p class="form-field value_reduction_field ">';
-        $html .= '<label for="value_reduction" >' . __('Discount reduction value') . ' </label><input class="short wc_input_price" type="text" name="value_reduction"   value="' . $value . '"  />';
+        $html .= '<label for="value_reduction" >' . __('Discount reduction value') . ' </label><input class="short wc_input_price" type="number" min="1" max="100" name="value_reduction"   value="' . $value . '"  />';
         $html .= '</p>';
 
         $html .= '<p class="form-field min_value_reduction_field ">';
-        $html .= '<label for="min_value_reduction" >' . __('Minimal discount barier') . ' </label><input class="short wc_input_price" type="text" name="min_value_reduction"   value="' . $min_value . '"  />';
+        $html .= '<label for="min_value_reduction" >' . __('Minimal discount barier') . ' </label><input class="short wc_input_price" type="number" min="1" max="100" name="min_value_reduction"   value="' . $min_value . '"  />';
         $html .= '</p>';
         $html .= '</div>';
 
