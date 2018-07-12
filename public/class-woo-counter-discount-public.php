@@ -47,8 +47,7 @@ class Woo_Counter_Discount_Public {
      * @param      string    $plugin_name       The name of the plugin.
      * @param      string    $version    The version of this plugin.
      */
-    private $discount_value;
-    private $tep_value;
+
 
     public function __construct($plugin_name, $version) {
 
@@ -83,8 +82,6 @@ class Woo_Counter_Discount_Public {
      */
 
     public function checkout_order_completed($order_id) {
-
-
 
         $order = wc_get_order($order_id);
 
