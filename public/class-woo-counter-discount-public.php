@@ -111,13 +111,13 @@ class Woo_Counter_Discount_Public {
     public function counter_sh($atts) {
         extract(shortcode_atts(['code' => 0,
                         ], $atts, 'dscatts'));
-
-        $amount = get_post_meta($this->get_coupon_id($atts['code']), 'coupon_amount', true);
+        $coupon_id = $this->get_coupon_id($atts['code']);
+        $amount = get_post_meta($coupon_id, 'coupon_amount', true);
 
         if ($amount) {
-            echo '<span class="coupon-mount coupon-id-' . $coupon_id . '">' . $amount . '</span>';
+            echo '<span class="coupon-amount coupon-id-' . $coupon_id . '">' . $amount . '</span>';
         } else {
-            echo '<span class="coupon-mount coupon-id-' . $coupon_id . '">' . __('Error') . '</span>';
+            echo '<span class="coupon-amount coupon-id-' . $coupon_id . '">' . __('Error') . '</span>';
         }
     }
 
