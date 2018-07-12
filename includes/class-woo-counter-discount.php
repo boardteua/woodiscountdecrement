@@ -181,14 +181,7 @@ class Woo_Counter_Discount {
          */
         
         $this->loader->add_action('woocommerce_order_status_completed', $plugin_public, 'checkout_order_completed');
-        
-        /**
-         * Ajax call to refresh doscount
-         */
-        
-        $this->loader->add_action('wp_ajax_refresh_value', $plugin_public, 'refresh_value');
-        $this->loader->add_action('wp_ajax_nopriv_refresh_value', $plugin_public, 'refresh_value');
-
+      
         /**
          * Add discount value shortcode                
          */

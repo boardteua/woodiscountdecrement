@@ -47,14 +47,10 @@ class Woo_Counter_Discount_Public {
      * @param      string    $plugin_name       The name of the plugin.
      * @param      string    $version    The version of this plugin.
      */
-
-
     public function __construct($plugin_name, $version) {
 
         $this->plugin_name = $plugin_name;
         $this->version = $version;
-        $this->discount_value = 50;
-        $this->step_value = 1;
     }
 
     /**
@@ -77,9 +73,6 @@ class Woo_Counter_Discount_Public {
         // wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/woo-counter-discount-public.js', array('jquery'), $this->version, false);
     }
 
-    /* Refresh value ajax call function 
-     * 
-     */
 
     public function checkout_order_completed($order_id) {
 
@@ -89,13 +82,12 @@ class Woo_Counter_Discount_Public {
         foreach ($order->get_used_coupons() as $coupon_name) {
 
             // Retrieving the coupon ID
-            $coupon_post_obj = get_page_by_title($coupon_name, OBJECT, 'shop_coupon');
-            $coupon_id = $coupon_post_obj->ID;
+            $coupon_id = $this->get_coupon_id($coupon_name);
 
             // Get an instance of WC_Coupon object in an array(necesary to use WC_Coupon methods)
             $coupons_obj = new WC_Coupon($coupon_id);
 
-            // check reuction option
+            // check reduction option
             if (get_post_meta($coupon_id, 'wc_reduction', true) == 1) {
 
                 $reduction_value = get_post_meta($coupon_id, 'wc_value_reduction', true);
@@ -112,50 +104,30 @@ class Woo_Counter_Discount_Public {
                 add_action('discount_updated', $this->discount_value, $coupon_id);
             }
         }
-
-
-        // try to fire ajax call
-    }
-
-    public function refresh_value() {
-
-        add_action('discount_updated', $amount, $id);
-
-        if ($amount) {
-            wp_send_json_success(array(
-                'anount' => $amount,
-                'anount' => $id
-            ));
-        } else {
-            wp_send_json_error(array(
-                'msg' => 0
-            ));
-        }
     }
 
     /**
-     * Shortcode value function
+     * Shortcode return amount function
      */
     public function couter_sh($atts) {
-        extract(shortcode_atts(['code' => null,
+        extract(shortcode_atts(['code' => 0,
                         ], $atts, 'dscatts'));
 
-        // Retrieving the coupon ID
-        if ($atts['code']) {
-            $coupon_name = $atts['code'];
-        } else {
-            $coupon_name = 0;
-        }
-        $coupon_post_obj = get_page_by_title($coupon_name, OBJECT, 'shop_coupon');
-        $coupon_id = $coupon_post_obj->ID;
-
-        $amount = get_post_meta($coupon_id, 'coupon_amount', true);
+        $amount = get_post_meta($this->get_coupon_id($atts['code']), 'coupon_amount', true);
 
         if ($amount) {
             echo '<span class="coupon-mount coupon-id-' . $coupon_id . '">' . $amount . '</span>';
         } else {
-            echo '<span class="coupon-mount coupon-id-' . $coupon_id . '">0</span>';
+            echo '<span class="coupon-mount coupon-id-' . $coupon_id . '">Error</span>';
         }
+    }
+
+    /**
+     * return coupon id by code
+     */
+    private function get_coupon_id($coupon_name) {
+        $coupon_post_obj = get_page_by_title($coupon_name, OBJECT, 'shop_coupon');
+        return $coupon_post_obj->ID;
     }
 
 }

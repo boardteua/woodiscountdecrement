@@ -121,7 +121,7 @@ class Woo_Counter_Discount_Admin {
         echo $html;
     }
 
-    function add_counter_otions_save($id) {
+    public function add_counter_otions_save($id) {
 
         // Sanitize user input.
         $chk = $_POST['reduction'] ? true : false;
