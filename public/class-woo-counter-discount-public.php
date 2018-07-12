@@ -73,7 +73,6 @@ class Woo_Counter_Discount_Public {
         // wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/woo-counter-discount-public.js', array('jquery'), $this->version, false);
     }
 
-
     public function checkout_order_completed($order_id) {
 
         $order = wc_get_order($order_id);
@@ -109,7 +108,7 @@ class Woo_Counter_Discount_Public {
     /**
      * Shortcode return amount function
      */
-    public function couter_sh($atts) {
+    public function counter_sh($atts) {
         extract(shortcode_atts(['code' => 0,
                         ], $atts, 'dscatts'));
 
@@ -118,7 +117,7 @@ class Woo_Counter_Discount_Public {
         if ($amount) {
             echo '<span class="coupon-mount coupon-id-' . $coupon_id . '">' . $amount . '</span>';
         } else {
-            echo '<span class="coupon-mount coupon-id-' . $coupon_id . '">Error</span>';
+            echo '<span class="coupon-mount coupon-id-' . $coupon_id . '">' . __('Error') . '</span>';
         }
     }
 

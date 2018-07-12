@@ -186,7 +186,7 @@ class Woo_Counter_Discount {
          * Add discount value shortcode                
          */
         
-        $this->loader->add_shortcode('discout_value', $plugin_public, 'couter_sh');
+        $this->loader->add_shortcode('discout_value', $plugin_public, 'counter_sh');
         
     }
 
