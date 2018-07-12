@@ -99,6 +99,7 @@ class Woo_Counter_Discount_Admin {
 
         $chk = get_post_meta($id, 'wc_reduction', true);
         $value = get_post_meta($id, 'wc_value_reduction', true);
+        $min_value = get_post_meta($id, 'wc_min_value_reduction', true);
 
         $html = '';
 
@@ -108,9 +109,14 @@ class Woo_Counter_Discount_Admin {
         $html .= '</p>';
 
         $html .= '<p class="form-field value_reduction_field ">';
-        $html .= '<label for="value_reduction" >' . __('Discount reduction value') . ' </label><input class="short wc_input_price" type="text" name="value_reduction" id="meta-checkbox" value="' . $value . '"  />';
+        $html .= '<label for="value_reduction" >' . __('Discount reduction value') . ' </label><input class="short wc_input_price" type="text" name="value_reduction"   value="' . $value . '"  />';
+        $html .= '</p>';
+
+        $html .= '<p class="form-field min_value_reduction_field ">';
+        $html .= '<label for="min_value_reduction" >' . __('Minimal discount barier') . ' </label><input class="short wc_input_price" type="text" name="min_value_reduction"   value="' . $min_value . '"  />';
         $html .= '</p>';
         $html .= '</div>';
+
 
         echo $html;
     }
@@ -121,6 +127,7 @@ class Woo_Counter_Discount_Admin {
         $chk = $_POST['reduction'] ? true : false;
         update_post_meta($id, 'wc_reduction', $chk);
         update_post_meta($id, 'wc_value_reduction', wc_format_decimal($_POST['value_reduction']));
+        update_post_meta($id, 'wc_min_value_reduction', wc_format_decimal($_POST['min_value_reduction']));
     }
 
 }

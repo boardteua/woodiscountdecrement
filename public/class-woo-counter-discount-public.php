@@ -65,7 +65,7 @@ class Woo_Counter_Discount_Public {
      */
     public function enqueue_styles() {
 
-       // wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/woo-counter-discount-public.css', array(), $this->version, 'all');
+        // wp_enqueue_style($this->plugin_name, plugin_dir_url(__FILE__) . 'css/woo-counter-discount-public.css', array(), $this->version, 'all');
     }
 
     /**
@@ -75,7 +75,7 @@ class Woo_Counter_Discount_Public {
      */
     public function enqueue_scripts() {
 
-       // wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/woo-counter-discount-public.js', array('jquery'), $this->version, false);
+        // wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/woo-counter-discount-public.js', array('jquery'), $this->version, false);
     }
 
     /* Refresh value ajax call function 
@@ -98,32 +98,21 @@ class Woo_Counter_Discount_Public {
             // Get an instance of WC_Coupon object in an array(necesary to use WC_Coupon methods)
             $coupons_obj = new WC_Coupon($coupon_id);
 
-
-            error_log($coupons_obj->get_amount());
             // check reuction option
             if (get_post_meta($coupon_id, 'wc_reduction', true) == 1) {
 
                 $reduction_value = get_post_meta($coupon_id, 'wc_value_reduction', true);
-
-                error_log($reduction_value);
-
+                $min_value = get_post_meta($coupon_id, 'wc_min_value_reduction', true);
                 $coupons_amount = $coupons_obj->get_amount();
 
                 // decrement the amount
 
-                if ($coupons_amount - $reduction_value >= 0) {
-                    $coupons_obj->set_amount($coupons_amount - $reduction_value);
-
+                if ($coupons_amount - $reduction_value >= $min_value) {
                     update_post_meta($coupon_id, 'coupon_amount', $coupons_amount - $reduction_value);
-
-                    error_log('set amount trigegerd');
                 } else {
-                    $coupons_obj->set_amount(0);
-
-                    update_post_meta($coupon_id, 'coupon_amount', 0);
+                    update_post_meta($coupon_id, 'coupon_amount', $min_value);
                 }
-
-                add_action('discount_updated', $this->discount_value, $coupon_id );
+                add_action('discount_updated', $this->discount_value, $coupon_id);
             }
         }
 
@@ -133,8 +122,8 @@ class Woo_Counter_Discount_Public {
 
     public function refresh_value() {
 
-        add_action('discount_updated',$amount,$id);
-        
+        add_action('discount_updated', $amount, $id);
+
         if ($amount) {
             wp_send_json_success(array(
                 'anount' => $amount,
@@ -166,9 +155,9 @@ class Woo_Counter_Discount_Public {
         $amount = get_post_meta($coupon_id, 'coupon_amount', true);
 
         if ($amount) {
-            echo '<span class="coupon-mount coupon-id-'.$coupon_id.'">'.$amount.'</span>';
+            echo '<span class="coupon-mount coupon-id-' . $coupon_id . '">' . $amount . '</span>';
         } else {
-            echo '<span class="coupon-mount coupon-id-'.$coupon_id.'">0</span>';
+            echo '<span class="coupon-mount coupon-id-' . $coupon_id . '">0</span>';
         }
     }
 
