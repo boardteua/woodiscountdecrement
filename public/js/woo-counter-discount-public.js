@@ -1,15 +1,14 @@
-;(function ($, window, document, undefined) {
+;
+(function ($, window, document, undefined) {
+    $(document).on('heartbeat-tick', function (event, data) {
 
-    $('.composite_data')
+        if (data.acn === undefined) {
+            return;
+        }
 
-            .on('wc-composite-initializing', function (event, composite) {
+        $.each(data.acn.amount, function (key, value) {
+            $('.coupon-id-' + value.id).text(value.am);
+        });
 
-                var current_configuration = composite.api.get_composite_configuration();
-
-                console.log(current_configuration);
-            });
-
-                var current_configuration = composite.api.get_composite_configuration();
-
-                console.log(current_configuration);
+    });
 })(jQuery, window, document);

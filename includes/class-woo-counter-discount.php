@@ -157,6 +157,8 @@ class Woo_Counter_Discount {
         $this->loader->add_action( 'woocommerce_coupon_options', $plugin_admin, 'add_counter_fields');
         $this->loader->add_action( 'woocommerce_coupon_options_save', $plugin_admin, 'add_counter_otions_save');
         
+        
+        
     }
     
     /**
@@ -187,6 +189,13 @@ class Woo_Counter_Discount {
          */
         
         $this->loader->add_shortcode('discout_value', $plugin_public, 'counter_sh');
+        
+         /**
+         * Update amount on frontend with wp hearbeat             
+         */
+        
+        $this->loader->add_filter( 'heartbeat_send', $plugin_public, 'update_amount_front');
+        $this->loader->add_filter( 'heartbeat_nopriv_send', $plugin_public, 'update_amount_front');
         
     }
 

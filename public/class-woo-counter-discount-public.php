@@ -47,6 +47,8 @@ class Woo_Counter_Discount_Public {
      * @param      string    $plugin_name       The name of the plugin.
      * @param      string    $version    The version of this plugin.
      */
+    public static $pair;
+
     public function __construct($plugin_name, $version) {
 
         $this->plugin_name = $plugin_name;
@@ -70,7 +72,7 @@ class Woo_Counter_Discount_Public {
      */
     public function enqueue_scripts() {
 
-        // wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/woo-counter-discount-public.js', array('jquery'), $this->version, false);
+        wp_enqueue_script($this->plugin_name, plugin_dir_url(__FILE__) . 'js/woo-counter-discount-public.js', array('heartbeat'), $this->version, false);
     }
 
     public function checkout_order_completed($order_id) {
@@ -100,7 +102,6 @@ class Woo_Counter_Discount_Public {
                 } else {
                     update_post_meta($coupon_id, 'coupon_amount', $min_value);
                 }
-                add_action('discount_updated', $this->discount_value, $coupon_id);
             }
         }
     }
@@ -115,10 +116,30 @@ class Woo_Counter_Discount_Public {
         $amount = get_post_meta($coupon_id, 'coupon_amount', true);
 
         if ($amount) {
-            echo '<span class="coupon-amount coupon-id-' . $coupon_id . '">' . $amount . '</span>';
+            return  '<span class="coupon-amount coupon-id-' . $coupon_id . '" >' . $amount . '</span>';
         } else {
-            echo '<span class="coupon-amount coupon-id-' . $coupon_id . '">' . __('Error') . '</span>';
+            return  '<span class="coupon-amount coupon-id-' . $coupon_id . '" >' . __('Error') . '</span>';
         }
+    }
+
+    /**
+     * Update amount on front by wp-hearbeat
+     */
+    public function update_amount_front($response) {
+        global $wpdb;
+
+        $results = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}postmeta WHERE meta_key = 'wc_reduction' AND meta_value = 1 ", OBJECT);
+
+        foreach ($results as $res) {
+            $cuid[] = array('id' => $res->post_id, 'am' => get_post_meta($res->post_id, 'coupon_amount', true));
+        }
+
+
+        $response['acn'] = array(
+            'amount' => $cuid
+        );
+
+        return $response;
     }
 
     /**
