@@ -97,6 +97,15 @@ class Woo_Counter_Discount_Admin {
 
     public function add_counter_fields($id) {
 
+        // fix for old woocommerce
+        
+        if (empty($id)) {
+
+            global $post;
+            $id = $post->ID;
+        }
+        // end fix for old woocommerce
+        
         $chk = get_post_meta($id, 'wc_reduction', true);
         $value = get_post_meta($id, 'wc_value_reduction', true);
         $min_value = get_post_meta($id, 'wc_min_value_reduction', true);
@@ -116,7 +125,6 @@ class Woo_Counter_Discount_Admin {
         $html .= '<label for="min_value_reduction" >' . __('Minimal discount barier') . ' </label><input class="short wc_input_price" type="number" min="1" max="100" name="min_value_reduction"   value="' . $min_value . '"  />';
         $html .= '</p>';
         $html .= '</div>';
-
 
         echo $html;
     }
