@@ -182,7 +182,8 @@ class Woo_Counter_Discount {
          * 
          */
         
-        $this->loader->add_action('woocommerce_order_status_completed', $plugin_public, 'checkout_order_completed');
+          $this->loader->add_action('woocommerce_order_status_completed', $plugin_public, 'checkout_order_completed');
+	//$this->loader->add_action('woocommerce_payment_complete', $plugin_public, 'checkout_order_completed');
       
         /**
          * Add discount value shortcode                

@@ -77,7 +77,8 @@ class Woo_Counter_Discount_Public {
 
     public function checkout_order_completed($order_id) {
 
-        $order = wc_get_order($order_id);
+        $order = new WC_Order($order_id);
+
 
         // Coupons used in the order LOOP (as they can be multiple)
         foreach ($order->get_used_coupons() as $coupon_name) {
@@ -86,21 +87,30 @@ class Woo_Counter_Discount_Public {
             $coupon_id = $this->get_coupon_id($coupon_name);
 
             // Get an instance of WC_Coupon object in an array(necesary to use WC_Coupon methods)
-            $coupons_obj = new WC_Coupon($coupon_id);
-
+            // 
             // check reduction option
             if (get_post_meta($coupon_id, 'wc_reduction', true) == 1) {
 
-                $reduction_value = get_post_meta($coupon_id, 'wc_value_reduction', true);
-                $min_value = get_post_meta($coupon_id, 'wc_min_value_reduction', true);
-                $coupons_amount = $coupons_obj->get_amount();
+                $coupon_amount = 0; 
+                $reduction_value = 0;
 
+                $coupon_amount = (int) get_post_meta($coupon_id, 'coupon_amount', true);
+                $reduction_value = (int) get_post_meta($coupon_id, 'wc_value_reduction', true);
+                $min_value = (int) get_post_meta($coupon_id, 'wc_min_value_reduction', true);
+            
                 // decrement the amount
+                $value = $coupon_amount - $reduction_value;
 
-                if ($coupons_amount - $reduction_value >= $min_value) {
-                    update_post_meta($coupon_id, 'coupon_amount', $coupons_amount - $reduction_value);
+                if ($value >= $min_value) {
+
+                    update_post_meta($coupon_id, 'coupon_amount', $value);
+
+                    wp_cache_clear_cache();
                 } else {
                     update_post_meta($coupon_id, 'coupon_amount', $min_value);
+
+                    wp_cache_clear_cache();
+                    error_log('min value show ' . $min_value);
                 }
             }
         }
@@ -116,9 +126,9 @@ class Woo_Counter_Discount_Public {
         $amount = get_post_meta($coupon_id, 'coupon_amount', true);
 
         if ($amount) {
-            return  '<span class="coupon-amount coupon-id-' . $coupon_id . '" >' . $amount . '</span>';
+            return '<span class="coupon-amount coupon-id-' . $coupon_id . '" >' . $amount . '</span>';
         } else {
-            return  '<span class="coupon-amount coupon-id-' . $coupon_id . '" >' . __('Error') . '</span>';
+            return '<span class="coupon-amount coupon-id-' . $coupon_id . '" >' . __('Error') . '</span>';
         }
     }
 
