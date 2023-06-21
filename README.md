@@ -1,4 +1,4 @@
-Wordpress plugin that implements discount changes based on count of buys
+Wordpress plugin that implements discount value changes based on count of buys
 
 Use [discout_value] shortcode to show current amount of discount wherever you want on the site
 
